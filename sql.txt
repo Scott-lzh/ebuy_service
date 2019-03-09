@@ -1,0 +1,264 @@
+-- Create table
+create table EB_CART
+(
+  eb_cartid   INTEGER not null,
+  eb_userid   INTEGER not null,
+  eb_goodid   INTEGER not null,
+  eb_shopdate DATE
+)
+tablespace MYSCHOOLDB
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EB_CART
+  add constraint PK_CARTID primary key (EB_CARTID)
+  using index 
+  tablespace SYSTEM
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table EB_CART
+  add constraint FK_CGOODID foreign key (EB_GOODID)
+  references EB_GOODS (EB_GOODSID);
+alter table EB_CART
+  add constraint FK_CUSERID foreign key (EB_USERID)
+  references EB_USER (EB_USERID);
+
+
+-- Create table
+create table EB_FEATURE
+(
+  eb_featureid     INTEGER not null,
+  eb_featureprice  NUMBER not null,
+  eb_featurereason CLOB
+)
+tablespace MYSCHOOLDB
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EB_FEATURE
+  add constraint FK_GOODSID foreign key (EB_FEATUREID)
+  references EB_GOODS (EB_GOODSID);
+
+
+-- Create table
+create table EB_GOODS
+(
+  eb_goodsid       INTEGER not null,
+  eb_goodsname     NVARCHAR2(30) not null,
+  eb_goodstypeid   INTEGER not null,
+  eb_goodscredits  INTEGER default 0,
+  eb_goodsprice    NUMBER not null,
+  eb_goodssynopsis NVARCHAR2(200),
+  eb_goodsarea     NVARCHAR2(80)
+)
+tablespace MYSCHOOLDB
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EB_GOODS
+  add constraint PK_GOODSID primary key (EB_GOODSID)
+  using index 
+  tablespace SYSTEM
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table EB_GOODS
+  add constraint FK_TYPEID foreign key (EB_GOODSTYPEID)
+  references EB_TYPE (EB_TYPEID);
+
+
+-- Create table
+create table EB_MESSAGE
+(
+  eb_msgid       INTEGER not null,
+  eb_msgtitle    NVARCHAR2(40) not null,
+  eb_msgtime     DATE not null,
+  eb_msgauthor   NVARCHAR2(20) not null,
+  eb_msgclicknum INTEGER default 0,
+  eb_msgtext     CLOB,
+  eb_msgaid      INTEGER not null
+)
+tablespace MYSCHOOLDB
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EB_MESSAGE
+  add constraint PK_EBID primary key (EB_MSGID)
+  using index 
+  tablespace SYSTEM
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table EB_MESSAGE
+  add constraint FK_USERID foreign key (EB_MSGAID)
+  references EB_USER (EB_USERID);
+
+
+-- Create table
+create table EB_RECOM
+(
+  eb_recomgoodsid INTEGER not null,
+  eb_recomrank    NUMBER default 0 not null,
+  eb_recompic     NVARCHAR2(200)
+)
+tablespace MYSCHOOLDB
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EB_RECOM
+  add constraint FK_RECOMID foreign key (EB_RECOMGOODSID)
+  references EB_GOODS (EB_GOODSID);
+
+
+-- Create table
+create table EB_TYPE
+(
+  eb_typeid   INTEGER not null,
+  eb_typename NVARCHAR2(16)
+)
+tablespace MYSCHOOLDB
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EB_TYPE
+  add constraint PK_TYPEID primary key (EB_TYPEID)
+  using index 
+  tablespace SYSTEM
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+
+
+-- Create table
+create table EB_USER
+(
+  eb_userid      INTEGER not null,
+  eb_username    NVARCHAR2(24) not null,
+  eb_usersex     NVARCHAR2(2) not null,
+  eb_userage     INTEGER not null,
+  eb_usertel     NVARCHAR2(40),
+  eb_usertype    INTEGER default 3 not null,
+  eb_usercredit  INTEGER default 0,
+  eb_userpwd     NVARCHAR2(24) not null,
+  eb_userbirth   DATE not null,
+  eb_useraddress NVARCHAR2(30)
+)
+tablespace MYSCHOOLDB
+  pctfree 10
+  initrans 1
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table EB_USER
+  add constraint PK_USERID primary key (EB_USERID)
+  using index 
+  tablespace SYSTEM
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+-- Create/Recreate check constraints 
+alter table EB_USER
+  add constraint CK_USERAGE
+  check (eb_userAge>=1);
+alter table EB_USER
+  add constraint CK_USERTYPE
+  check (eb_userType=1 OR eb_userType=2 OR eb_userType=3);
+
+
+-- Create sequence 
+create sequence SEQ_CARTID
+minvalue 1
+maxvalue 9999999999999999999999999999
+start with 21
+increment by 1
+cache 20;
